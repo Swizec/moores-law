@@ -12,13 +12,14 @@ const Label = styled.text`
     alignment-baseline: middle;
 `;
 
-const useTransition = (targetValue, name) => {
-    const [renderValue, setRenderValue] = useState(targetValue);
+const useTransition = ({ targetValue, name, startValue, easing }) => {
+    const [renderValue, setRenderValue] = useState(startValue || targetValue);
 
     useEffect(() => {
         d3.selection()
             .transition(name)
             .duration(2000)
+            .ease(easing || d3.easeLinear)
             .tween(name, () => {
                 const interpolate = d3.interpolate(renderValue, targetValue);
                 return t => setRenderValue(interpolate(t));
@@ -29,11 +30,25 @@ const useTransition = (targetValue, name) => {
 };
 
 const Bar = ({ data, y, width, thickness }) => {
-    const renderWidth = useTransition(width, `width-${data.name}`);
-    const renderY = useTransition(y, `y-${data.name}`);
+    const renderWidth = useTransition({
+        targetValue: width,
+        name: `width-${data.name}`
+    });
+    const renderY = useTransition({
+        targetValue: y,
+        name: `y-${data.name}`,
+        startValue: -500 + Math.random() * 200,
+        easing: d3.easeCubicInOut
+    });
+    const renderX = useTransition({
+        targetValue: 0,
+        name: `x-${data.name}`,
+        startValue: 1000 + Math.random() * 200,
+        easing: d3.easeCubicInOut
+    });
 
     return (
-        <g transform={`translate(${0}, ${renderY})`}>
+        <g transform={`translate(${renderX}, ${renderY})`}>
             <rect
                 x={10}
                 y={0}
