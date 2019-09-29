@@ -3,6 +3,8 @@ import styled from "styled-components";
 import * as d3 from "d3";
 import faker from "faker";
 
+import Barchart from "./Barchart";
+
 const Svg = styled.svg`
     width: 100vw;
     height: 100vh;
@@ -23,9 +25,11 @@ function App() {
         }))
     );
 
-    console.log(data);
-
-    return <Svg></Svg>;
+    return (
+        <Svg>
+            <Barchart data={data[0]} x={100} y={50} />
+        </Svg>
+    );
 }
 
 export default App;
