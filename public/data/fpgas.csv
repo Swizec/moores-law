@@ -1,0 +1,15 @@
+FPGA,Transistor count,Date of introduction,Designer,Manufacturer,MOS process,Area,Ref
+Virtex,"70,000,000",1997,Xilinx,,,,
+Virtex-E,"200,000,000",1998,Xilinx,,,,
+Virtex-II,"350,000,000",2000,Xilinx,,130 nm,,
+Virtex-II PRO,"430,000,000",2002,Xilinx,,,,
+Virtex-4,"1,000,000,000",2004,Xilinx,,90 nm,,
+Virtex-5,"1,100,000,000",2006,Xilinx,TSMC,65 nm,,[157]
+Stratix IV,"2,500,000,000",2008,Altera,TSMC,40 nm,,[158]
+Stratix V,"3,800,000,000",2011,Altera,TSMC,28 nm,,[159]
+Arria 10,"5,300,000,000",2014,Altera,TSMC,20 nm,,[160]
+Virtex-7 2000T,"6,800,000,000",2011,Xilinx,TSMC,28 nm,,[161]
+Stratix 10 SX 2800,"17,000,000,000",2017,Intel,Intel,14 nm,560 mm²,[162][163]
+Virtex-Ultrascale VU440,"20,000,000,000",2013,Xilinx,TSMC,20 nm,,[164][165]
+Virtex-Ultrascale+ VU19P,"35,000,000,000",2019,Xilinx,TSMC,16 nm,900 mm² [c],[166][167][168]
+Versal/Everest,"50,000,000,000",2018,Xilinx,TSMC,7 nm,,[169][170][171][172]
