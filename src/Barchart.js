@@ -12,21 +12,28 @@ const Label = styled.text`
     alignment-baseline: middle;
 `;
 
-const Bar = ({ data, y, width, thickness }) => {
-    const [renderWidth, setRenderWidth] = useState(width);
+const useTransition = (targetValue, name) => {
+    const [renderValue, setRenderValue] = useState(targetValue);
 
     useEffect(() => {
         d3.selection()
-            .transition(`width-${data.name}`)
-            .duration(3000)
-            .tween(`width-${data.name}`, () => {
-                const interpolate = d3.interpolate(renderWidth, width);
-                return t => setRenderWidth(interpolate(t));
+            .transition(name)
+            .duration(2000)
+            .tween(name, () => {
+                const interpolate = d3.interpolate(renderValue, targetValue);
+                return t => setRenderValue(interpolate(t));
             });
-    }, [width]);
+    }, [targetValue]);
+
+    return renderValue;
+};
+
+const Bar = ({ data, y, width, thickness }) => {
+    const renderWidth = useTransition(width, `width-${data.name}`);
+    const renderY = useTransition(y, `y-${data.name}`);
 
     return (
-        <g transform={`translate(${0}, ${y})`}>
+        <g transform={`translate(${0}, ${renderY})`}>
             <rect
                 x={10}
                 y={0}

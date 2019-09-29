@@ -17,17 +17,23 @@ const useData = () => {
     // Replace this with actual data loading
     useEffect(() => {
         // Create 5 imaginary processors
-        const processors = d3.range(5).map(_ => faker.hacker.noun()),
+        const processors = d3.range(10).map(i => `CPU ${i}`),
             random = d3.randomUniform(1000, 50000);
 
+        let N = 1;
+
         // create random transistor counts for each year
-        const data = d3.range(1970, 2026).map(year =>
-            d3.range(5).map(i => ({
+        const data = d3.range(1970, 2026).map(year => {
+            if (year % 5 === 0 && N < 10) {
+                N += 1;
+            }
+
+            return d3.range(N).map(i => ({
                 year: year,
                 name: processors[i],
                 transistors: Math.round(random())
-            }))
-        );
+            }));
+        });
 
         setData(data);
     }, []);
@@ -55,7 +61,7 @@ function App() {
 
                 return year + 1;
             });
-        }, 3000);
+        }, 2000);
 
         return () => interval.stop();
     }, []);
