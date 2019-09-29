@@ -21,7 +21,7 @@ const useData = () => {
             random = d3.randomUniform(1000, 50000);
 
         // create random transistor counts for each year
-        const data = d3.range(1970, 2025).map(year =>
+        const data = d3.range(1970, 2026).map(year =>
             d3.range(5).map(i => ({
                 year: year,
                 name: processors[i],
@@ -40,23 +40,27 @@ function App() {
     const [currentYear, setCurrentYear] = useState(1970);
 
     const yearIndex = d3
-        .scaleLinear()
-        .domain([1970, 2025])
-        .range([0, 2025 - 1970]);
+        .scaleOrdinal()
+        .domain(d3.range(1970, 2025))
+        .range(d3.range(0, 2025 - 1970));
 
     // Drives the main animation progressing through the years
     // It's actually a simple counter :P
     useEffect(() => {
         const interval = d3.interval(() => {
-            if (currentYear >= 2024) {
-                interval.stop();
-            }
+            setCurrentYear(year => {
+                if (year + 1 > 2025) {
+                    interval.stop();
+                }
 
-            setCurrentYear(year => year + 1);
+                return year + 1;
+            });
         }, 3000);
 
         return () => interval.stop();
     }, []);
+
+    console.log(yearIndex(currentYear));
 
     return (
         <Svg>
