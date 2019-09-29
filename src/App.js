@@ -27,7 +27,13 @@ function App() {
 
     return (
         <Svg>
-            <Barchart data={data[0]} x={100} y={50} />
+            <Barchart
+                data={data[0]}
+                x={100}
+                y={50}
+                barThickness={20}
+                width={500}
+            />
         </Svg>
     );
 }
