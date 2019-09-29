@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import * as d3 from "d3";
 import styled from "styled-components";
 
@@ -9,6 +9,16 @@ const Label = styled.text`
         "Helvetica Neue", sans-serif;
     font-size: 14px;
     text-anchor: end;
+    alignment-baseline: middle;
+`;
+
+const EndLabel = styled.text`
+    fill: white;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+        "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+        "Helvetica Neue", sans-serif;
+    font-size: 14px;
+    text-anchor: start;
     alignment-baseline: middle;
 `;
 
@@ -29,7 +39,7 @@ const useTransition = ({ targetValue, name, startValue, easing }) => {
     return renderValue;
 };
 
-const Bar = ({ data, y, width, thickness }) => {
+const Bar = ({ data, y, width, thickness, endLabel }) => {
     const renderWidth = useTransition({
         targetValue: width,
         name: `width-${data.name}`
@@ -57,22 +67,32 @@ const Bar = ({ data, y, width, thickness }) => {
                 fill="white"
             />
             <Label y={thickness / 2}>{data.name}</Label>
+            <EndLabel y={thickness / 2} x={renderWidth + 15}>
+                {endLabel}
+            </EndLabel>
         </g>
     );
 };
 
 // Draws the barchart for a single year
 const Barchart = ({ data, x, y, barThickness, width }) => {
-    const yScale = d3
-        .scaleBand()
-        .domain(d3.range(0, data.length))
-        .paddingInner(0.2)
-        .range([data.length * barThickness, 0]);
+    const yScale = useMemo(
+        () =>
+            d3
+                .scaleBand()
+                .domain(d3.range(0, data.length))
+                .paddingInner(0.2)
+                .range([data.length * barThickness, 0]),
+        [data.length, barThickness]
+    );
 
+    // not worth memoizing because data changes every time
     const xScale = d3
         .scaleLinear()
         .domain([0, d3.max(data, d => d.transistors)])
         .range([0, width]);
+
+    const formatter = xScale.tickFormat();
 
     return (
         <g transform={`translate(${x}, ${y})`}>
@@ -84,6 +104,7 @@ const Barchart = ({ data, x, y, barThickness, width }) => {
                         key={d.name}
                         y={yScale(index)}
                         width={xScale(d.transistors)}
+                        endLabel={formatter(d.transistors)}
                         thickness={yScale.bandwidth()}
                     />
                 ))}
