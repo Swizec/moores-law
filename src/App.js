@@ -35,27 +35,40 @@ const useData = () => {
     const [data, setData] = useState(null);
 
     // Replace this with actual data loading
-    useEffect(() => {
-        // Create 5 imaginary processors
-        const processors = d3.range(10).map(i => `CPU ${i}`),
-            random = d3.randomUniform(1000, 50000);
+    useEffect(function() {
+        (async () => {
+            const datas = await Promise.all([
+                d3.csv("data/microprocessors.csv", row => ({
+                    name: row["Processor"].replace(/\(.*\)/g, ""),
+                    designer: row["Designer"],
+                    year: Number(
+                        row["Date of introduction"].replace(/\[.*\]/g, "")
+                    ),
+                    transistors: Number(
+                        row["MOS transistor count"]
+                            .replace(/\[.*\]/g, "")
+                            .replace(/[^0-9]/g, "")
+                    )
+                }))
+            ]);
 
-        let N = 1;
+            // Group by year and accumulate everything form previous
+            const grouped = datas
+                .flat()
+                .sort((a, b) => a.year - b.year)
+                .reduce((groups, el) => {
+                    if (!groups[el.year]) {
+                        const previous = groups[el.year - 1];
+                        groups[el.year] = previous || [];
+                    }
 
-        // create random transistor counts for each year
-        const data = d3.range(1970, 2026).map(year => {
-            if (year % 5 === 0 && N < 10) {
-                N += 1;
-            }
+                    groups[el.year] = [...groups[el.year], el];
 
-            return d3.range(N).map(i => ({
-                year: year,
-                name: processors[i],
-                transistors: Math.round(random())
-            }));
-        });
+                    return groups;
+                }, {});
 
-        setData(data);
+            setData(grouped);
+        })();
     }, []);
 
     return data;
@@ -65,18 +78,14 @@ function App() {
     const data = useData();
     const [currentYear, setCurrentYear] = useState(1970);
 
-    const yearIndex = d3
-        .scaleOrdinal()
-        .domain(d3.range(1970, 2025))
-        .range(d3.range(0, 2025 - 1970));
-
     // Drives the main animation progressing through the years
     // It's actually a simple counter :P
     useEffect(() => {
         const interval = d3.interval(() => {
             setCurrentYear(year => {
-                if (year + 1 > 2025) {
+                if (!data[year + 1]) {
                     interval.stop();
+                    return year;
                 }
 
                 return year + 1;
@@ -84,16 +93,16 @@ function App() {
         }, 2000);
 
         return () => interval.stop();
-    }, []);
+    }, [data]);
 
     return (
         <Svg>
             <Title x={"50%"} y={30}>
                 Moore's law vs. actual transistor count in React & D3
             </Title>
-            {data ? (
+            {data && data[currentYear] ? (
                 <Barchart
-                    data={data[yearIndex(currentYear)]}
+                    data={data[currentYear]}
                     x={100}
                     y={50}
                     barThickness={20}
