@@ -39,10 +39,11 @@ const useTransition = ({ targetValue, name, startValue, easing }) => {
     return renderValue;
 };
 
-const Bar = ({ data, y, width, thickness, endLabel, color }) => {
+const Bar = ({ data, y, width, thickness, formatter, color }) => {
     const renderWidth = useTransition({
         targetValue: width,
-        name: `width-${data.name}`
+        name: `width-${data.name}`,
+        easing: data.designer === "Moore" ? d3.easeLinear : d3.easeCubicInOut
     });
     const renderY = useTransition({
         targetValue: y,
@@ -56,6 +57,11 @@ const Bar = ({ data, y, width, thickness, endLabel, color }) => {
         startValue: 1000 + Math.random() * 200,
         easing: d3.easeCubicInOut
     });
+    const transistors = useTransition({
+        targetValue: data.transistors,
+        name: `trans-${data.name}`,
+        easing: d3.easeLinear
+    });
 
     return (
         <g transform={`translate(${renderX}, ${renderY})`}>
@@ -68,7 +74,9 @@ const Bar = ({ data, y, width, thickness, endLabel, color }) => {
             />
             <Label y={thickness / 2}>{data.name}</Label>
             <EndLabel y={thickness / 2} x={renderWidth + 15}>
-                {endLabel}
+                {data.designer === "Moore"
+                    ? Math.round(transistors)
+                    : formatter(data.transistors)}
             </EndLabel>
         </g>
     );
@@ -105,7 +113,8 @@ const Barchart = ({ data, x, y, barThickness, width }) => {
                     "Oracle",
                     "Samsung",
                     "Sun/Oracle",
-                    "Toshiba"
+                    "Toshiba",
+                    "Moore"
                 ])
                 .range([
                     "#009933",
@@ -123,7 +132,8 @@ const Barchart = ({ data, x, y, barThickness, width }) => {
                     "#F70000",
                     "#034EA1",
                     "#7F7F7F",
-                    "#FF0000"
+                    "#FF0000",
+                    "#D92AAD"
                 ]),
         []
     );
@@ -146,7 +156,7 @@ const Barchart = ({ data, x, y, barThickness, width }) => {
                         key={d.name}
                         y={yScale(index)}
                         width={xScale(d.transistors)}
-                        endLabel={formatter(d.transistors)}
+                        formatter={formatter}
                         thickness={yScale.bandwidth()}
                         color={color(d.designer) || "white"}
                     />
