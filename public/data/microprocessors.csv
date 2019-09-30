@@ -64,7 +64,7 @@ ARM700 (32-bit; 8 KB cache),"578,977[47]",1994,ARM,700 nm,68.51 mm²
 "Pentium II Klamath (32-bit, 64-bit SIMD, caches)","7,500,000",1997,Intel,350 nm,195 mm²
 "AMD K6 (32-bit, caches)","8,800,000",1997,AMD,350 nm,162 mm²
 F21 (21-bit; includes e.g. video),"15,000",1997[49],Offete Enterprises,,
-"AVR (8-bit, 40-pin; w/memory)","140,000 (48,000  excl. memory[55])",1997,Nordic VLSI/Atmel,,
+"AVR (8-bit, 40-pin; w/memory)","140,000",1997,Nordic VLSI/Atmel,,
 "Pentium II Deschutes (32-bit, large cache)","7,500,000",1998,Intel,250 nm,113 mm²
 "ARM 9TDMI (32-bit, no cache)","111,000[30]",1999,Acorn,350 nm,4.8 mm²
 "Pentium III Katmai (32-bit, 128-bit SIMD, caches)","9,500,000",1999,Intel,250 nm,128 mm²

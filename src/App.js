@@ -93,6 +93,22 @@ function App() {
     const data = useData();
     const [currentYear, setCurrentYear] = useState(1970);
 
+    // Simple Moore's Law: double count every 2 years
+    // Not mathematically the prettiest, but it works :P
+    const mooresLaw = d3.range(1971, 2025).reduce(
+        (law, year) => {
+            if (year % 2 === 0) {
+                const count = law[year - 2] * 2;
+                const delta = count - law[year - 2];
+
+                law[year - 1] = law[year - 2] + delta / 2;
+                law[year] = count;
+            }
+            return law;
+        },
+        { 1970: 1000 }
+    );
+
     // Drives the main animation progressing through the years
     // It's actually a simple counter :P
     useEffect(() => {
@@ -117,7 +133,16 @@ function App() {
             </Title>
             {data && data[currentYear] ? (
                 <Barchart
-                    data={data[currentYear]}
+                    data={[
+                        ...data[currentYear],
+                        {
+                            name: "Moore's law",
+                            designer: "Moore",
+                            year: currentYear,
+                            type: "",
+                            transistors: mooresLaw[currentYear]
+                        }
+                    ]}
                     x={150}
                     y={50}
                     barThickness={20}
