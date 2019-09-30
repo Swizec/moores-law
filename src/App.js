@@ -131,24 +131,23 @@ function App() {
             <Title x={"50%"} y={30}>
                 Moore's law vs. actual transistor count in React & D3
             </Title>
-            {data && data[currentYear] ? (
-                <Barchart
-                    data={[
-                        ...data[currentYear],
-                        {
-                            name: "Moore's law",
-                            designer: "Moore",
-                            year: currentYear,
-                            type: "",
-                            transistors: mooresLaw[currentYear]
-                        }
-                    ]}
-                    x={150}
-                    y={50}
-                    barThickness={20}
-                    width={500}
-                />
-            ) : null}
+
+            <Barchart
+                data={[
+                    ...((data && data[currentYear]) || []),
+                    {
+                        name: "Moore's law",
+                        designer: "Moore",
+                        year: currentYear,
+                        type: "",
+                        transistors: mooresLaw[currentYear]
+                    }
+                ]}
+                x={150}
+                y={50}
+                barThickness={20}
+                width={500}
+            />
             <Year x={"95%"} y={"95%"}>
                 {currentYear}
             </Year>
