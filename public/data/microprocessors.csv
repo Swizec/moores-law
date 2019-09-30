@@ -141,7 +141,6 @@ Six-core Core i7 (Gulftown),"1,170,000,000",2010,Intel,32 nm,240 mm²
 "Quad-core + GPU GT2 Core i7 Skylake K (64-bit, SIMD, caches)","1,750,000,000",2015,Intel,14 nm,122 mm²
 "Dual-core + GPU Iris Core i7 Broadwell-U (64-bit, SIMD, caches)","1,900,000,000[86]",2015,Intel,14 nm,133 mm²
 "Apple A9 (dual-core 64/32-bit ARM64 ""mobile SoC"", SIMD, caches)","> 2,000,000,000",2015,Apple,14 nm (Samsung),96 mm² (Samsung)
-"Apple A9 (dual-core 64/32-bit ARM64 ""mobile SoC"", SIMD, caches)","> 2,000,000,000",2015,Apple,16 nm (TSMC),104.5 mm² (TSMC)
 "Apple A9X (dual core 64/32-bit ARM64 ""mobile SoC"", SIMD, caches)","> 3,000,000,000",2015,Apple,16 nm,143.9 mm²
 "IBM z13 (64-bit, caches)","3,990,000,000",2015,IBM,22 nm,678 mm²
 IBM z13 Storage Controller,"7,100,000,000",2015,IBM,22 nm,678 mm²

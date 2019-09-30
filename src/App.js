@@ -31,6 +31,19 @@ const Title = styled.text`
     text-anchor: middle;
 `;
 
+const getYear = row =>
+    Number(row["Date of introduction"].replace(/\[.*\]/g, ""));
+
+const getName = (row, type) =>
+    `${row["Processor"].replace(/\(.*\)/g, "")} (${type})`;
+
+const getTransistors = row =>
+    Number(
+        row["MOS transistor count"]
+            .replace(/\[.*\]/g, "")
+            .replace(/[^0-9]/g, "")
+    );
+
 const useData = () => {
     const [data, setData] = useState(null);
 
@@ -38,25 +51,20 @@ const useData = () => {
     useEffect(function() {
         (async () => {
             const datas = await Promise.all([
-                d3.csv("data/microprocessors.csv", row => {
-                    const year = Number(
-                        row["Date of introduction"].replace(/\[.*\]/g, "")
-                    );
-
-                    return {
-                        name: `${row["Processor"].replace(
-                            /\(.*\)/g,
-                            ""
-                        )} - ${year}`,
-                        designer: row["Designer"],
-                        year: year,
-                        transistors: Number(
-                            row["MOS transistor count"]
-                                .replace(/\[.*\]/g, "")
-                                .replace(/[^0-9]/g, "")
-                        )
-                    };
-                })
+                d3.csv("data/microprocessors.csv", row => ({
+                    name: getName(row, "CPU"),
+                    designer: row["Designer"],
+                    year: getYear(row),
+                    transistors: getTransistors(row),
+                    type: "CPU"
+                })),
+                d3.csv("data/gpus.csv", row => ({
+                    name: getName(row, "GPU"),
+                    designer: row["Designer"],
+                    year: getYear(row),
+                    transistors: getTransistors(row),
+                    type: "GPU"
+                }))
             ]);
 
             // Group by year and accumulate everything form previous
